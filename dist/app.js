@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const dotenv_1 = require("dotenv");
+const telegraf_1 = require("telegraf");
+const envParsed = (0, dotenv_1.config)().parsed;
+const bot = new telegraf_1.Telegraf(envParsed.TEL_TOKEN);
+bot.start((ctx) => ctx.reply('Welcome'));
+// bot.help((ctx) => ctx.reply('Send me a sticker'));
+// bot.on(message('game'), (ctx) => ctx.reply('👍'));
+// bot.hears('hi', (ctx) => ctx.reply('Hey there'));
+bot.launch();
+// process.once('SIGINT', () => bot.stop('SIGINT'));
+// process.once('SIGTERM', () => bot.stop('SIGTERM'));
