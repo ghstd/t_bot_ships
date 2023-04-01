@@ -470,3 +470,33 @@ bot.launch();
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
+
+
+//=========================================================
+
+
+// bot.command('invite', (ctx) => {
+
+// 	// const otherUsers: IUserData[] = usersDb.filter((user) => user.id !== ctx.from.id);
+
+// 	usersDb.forEach((user) => {
+// 		bot.action(user.name, async (ctx) => {
+// 			bot.action('inviteResolve', (ctx_2) => {
+// 				ctx.reply(`${user.name} принял приглашение`)
+// 				ctx_2.deleteMessage()
+// 			})
+// 			bot.action('inviteReject', (ctx_2) => {
+// 				ctx.reply(`${user.name} отклонил приглашение`)
+// 				ctx_2.deleteMessage()
+// 			})
+// 			ctx.editMessageText(`вы отправили приглашение ${user.name}`)
+// 			bot.telegram.sendMessage(user.id, `${user.name} приглашает вас`, Markup.inlineKeyboard([
+// 				[Markup.button.callback('принять', 'inviteResolve'), Markup.button.callback('отклонить', 'inviteReject')]
+// 			]))
+// 		})
+// 	})
+
+// 	ctx.reply('выберите кого пригласить', Markup.inlineKeyboard(
+// 		usersDb.map((user) => [Markup.button.callback(user.name, user.name)])
+// 	))
+// })
