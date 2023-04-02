@@ -51,6 +51,7 @@ bot.command('start', (ctx) => {
 
 
 bot.command('invite', (ctx) => {
+	playersDb = []
 	const otherUsers: IUserData[] = usersDb.filter((user) => user.id !== ctx.from.id);
 
 	ctx.reply('выберите кого пригласить', Markup.inlineKeyboard(
@@ -158,6 +159,7 @@ bot.on(callbackQuery('data'), async (ctx) => {
 	}
 
 	if (eventType === 'playerReady') {
+		await ctx.editMessageText('ожидайте')
 		if (playersDb.every((player) => player.ready)) {
 			const playerIndex = whoseMove(movesCount);
 			movesCount++
@@ -231,8 +233,7 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 	} else {
 
 		const playerIndex = whoseMove(movesCount);
-		movesCount++
-		if (!playerIndex) {
+		if (playerIndex === undefined) {
 			return
 		}
 		const movingPlayer = playersDb[playerIndex];
@@ -245,6 +246,8 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 				return
 			}
 
+			movesCount++
+
 			switch (movingPlayer.playerField[coord_1][coord_2]) {
 				case 0:
 					movingPlayer.playerField[coord_1][coord_2] = 2
@@ -252,7 +255,7 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 					break;
 				case 1:
 					movingPlayer.playerField[coord_1][coord_2] = 3
-					waitingPlayer.playerField[coord_1][coord_2] = 3
+					waitingPlayer.targetField[coord_1][coord_2] = 3
 					break;
 				default:
 					break;
@@ -280,10 +283,11 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 				return
 			}
 
-
 			ctx.telegram.sendMessage(waitingPlayer.player.id, 'ход второго игрока', Markup.removeKeyboard())
 
 			ctx.chat.id = movingPlayer.player.id
+
+			await ctx.reply('ваше поле')
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${movingPlayer.playerField
 				.map((item) => item
 					.map((i) => {
@@ -304,6 +308,8 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 				.join('\n')}</pre>`, Markup.keyboard(
 					movingPlayer.playerField.map((item, index) => item.map((subItem, n) => `${String.fromCharCode((65 + index))}${n}`))
 				))
+
+			await ctx.reply('поле второго игрока')
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${movingPlayer.targetField
 				.map((item) => item
 					.map((i) => {

@@ -1,119 +1,123 @@
-export function checkField(data: any[][]) {
+export function checkField(inputData: number[][]) {
 
-	const success = {
-		status: true,
-		message: 'успешная расстановка',
+	const data: number[][] = inputData.map((arr) => new Array().concat(arr));
+
+	const quantityOfItems: { [key: string]: number } = {
+		1: 0,
+		2: 0,
+		3: 0,
+		4: 0
 	};
-
-	const error = {
-		status: false,
-		message: 'неправильная расстановка',
-	};
-
-	let one = 0;
-	let two = 0;
-	let three = 0;
-	let four = 0;
 
 	for (let i = 0; i < data.length; i++) {
-		for (let n = 0; n < data[i].length; n++) {
-			if (data[i][n] === 1 && i < data.length - 1) {
-				if (data[i][n + 1] === 1) {
-					let k = 1;
-					if (data[i + 1][n] === 1) {
-						return error
-					}
-					while (data[i][n + k] === 1) {
-						if (data[i + 1][n + k] === 1 || data[i + 1][n + k + 1] === 1) {
-							return error
-						}
-						if (k > 3) {
-							return error
-						}
-						k++
-					}
-					if ((data[i][n + k] === 1) && (data[i + 1][n + k] === 1)) {
-						return error
-					}
-					switch (k) {
-						case 2:
-							two = two + 1
-							break;
-						case 3:
-							three = three + 1
-							break;
-						case 4:
-							four = four + 1
-							break;
+		for (let j = 0; j < data[i].length; j++) {
 
-						default:
-							break;
-					}
-					n = n + k
-				} else if (data[i + 1][n] === 1) {
-					let k = 1;
-					if (data[i][n + 1] === 1) {
-						return error
-					}
-					while (data[i + k][n] === 1 && i + 1 < data.length && n + 1 < data.length) {
-						if (data[i + k][n + 1] === 1) {
-							return error
-						}
-						if (k > 3) {
-							return error
-						}
-						k++
-					}
-					if ((data[i + k][n] === 1 && i + 1 < data.length) && (data[i + k][n + 1] === 1 && i + 1 < data.length)) {
-						return error
-					}
-					switch (k) {
-						case 2:
-							two = two + 1
-							break;
-						case 3:
-							three = three + 1
-							break;
-						case 4:
-							four = four + 1
-							break;
+			if (data[i][j] === 1) {
+				let quantityCounter = 0;
+				data[i][j] = 2
+				quantityCounter++
 
-						default:
-							break;
+				if (data[i][j + 1] ? data[i][j + 1] === 1 : false) {
+
+					data[i][j + 1] = 2
+					quantityCounter++
+					if (data[i + 1]) {
+						data[i + 1][j] = 0
+						data[i + 1][j + 1] = 0
 					}
-					n = n + 1
+					if (data[i][j + 2] ? data[i][j + 2] === 1 : false) {
+						data[i][j + 2] = 2
+						quantityCounter++
+						if (data[i + 1]) {
+							data[i + 1][j + 2] = 0
+						}
+						if (data[i][j + 3] ? data[i][j + 3] === 1 : false) {
+							data[i][j + 3] = 2
+							quantityCounter++
+							data[i][j + 4] = 0
+							if (data[i + 1]) {
+								data[i + 1][j + 3] = 0
+								data[i + 1][j + 4] = 0
+							}
+						} else {
+							data[i][j + 3] ? data[i][j + 3] = 0 : false
+							if (data[i + 1]) {
+								data[i + 1][j + 3] = 0
+							}
+						}
+					} else {
+						data[i][j + 2] ? data[i][j + 2] = 0 : false
+						if (data[i + 1]) {
+							data[i + 1][j + 2] = 0
+						}
+					}
+
+				} else if (data[i + 1] ? data[i + 1][j] === 1 : false) {
+
+					data[i + 1][j] = 2
+					quantityCounter++
+					data[i][j + 1] ? data[i][j + 1] = 0 : false
+					data[i + 1][j + 1] ? data[i + 1][j + 1] = 0 : false
+					if (data[i + 2] ? data[i + 2][j] === 1 : false) {
+						data[i + 2][j] = 2
+						quantityCounter++
+						data[i + 2][j + 1] ? data[i + 2][j + 1] = 0 : false
+						if (data[i + 3] ? data[i + 3][j] === 1 : false) {
+							data[i + 3][j] = 2
+							quantityCounter++
+							data[i + 3][j + 1] ? data[i + 3][j + 1] = 0 : false
+							if (data[i + 4]) {
+								data[i + 4][j] = 0
+								data[i + 4][j + 1] ? data[i + 4][j + 1] = 0 : false
+							}
+						} else {
+							if (data[i + 3]) {
+								data[i + 3][j] = 0
+								data[i + 3][j + 1] ? data[i + 3][j + 1] = 0 : false
+							}
+						}
+					} else {
+						if (data[i + 2]) {
+							data[i + 2][j] = 0
+							data[i + 2][j + 1] ? data[i + 2][j + 1] = 0 : false
+						}
+					}
 				} else {
-					if ((data[i][n + 1] === 1) &&
-						(data[i + 1][n] === 1 && i + 1 < data.length) &&
-						data[i + 1][n + 1] === 1 && i + 1 < data.length) {
-						return error
+					data[i][j + 1] ? data[i][j + 1] = 0 : false
+					if (data[i + 1]) {
+						data[i + 1][j] = 0
+						data[i + 1][j + 1] ? data[i + 1][j + 1] = 0 : false
 					}
-					one = one + 1
-					n = n + 1
 				}
+
+				quantityOfItems[quantityCounter]++
+			}
+
+		}
+	}
+
+	for (let i = data.length - 1; i < data.length; i++) {
+		for (let j = 0; j < data[i].length; j++) {
+			if (data[i - 1][j + 1] === 2) {
+				data[i][j] = 0
 			}
 		}
 	}
 
-	if (one + two + three + four === 20) {
-		if (one !== 4) {
-			error.message = 'неверное количество 1-пал'
-			return error
-		} else if (two !== 3) {
-			error.message = 'неверное количество 2-пал'
-			return error
-		} else if (three !== 2) {
-			error.message = 'неверное количество 3-пал'
-			return error
-		} else if (four !== 1) {
-			error.message = 'неверное количество 4-пал'
-			return error
-		} else {
-			return success
+	const result = quantityOfItems[1] + quantityOfItems[2] * 2 + quantityOfItems[3] * 3 + quantityOfItems[4] * 4;
+
+	if (result === 20) {
+		return {
+			status: true,
+			message: 'успешная расстановка',
+			quantity: quantityOfItems
 		}
 	} else {
-		error.message = 'продолжайте расстановку:'
-		return error
+		return {
+			status: false,
+			message: 'продолжайте расстановку',
+			quantity: quantityOfItems
+		}
 	}
 }
 
@@ -124,3 +128,8 @@ export function whoseMove(counter: number) {
 		whoseMove(counter % 2)
 	}
 }
+
+
+
+
+
