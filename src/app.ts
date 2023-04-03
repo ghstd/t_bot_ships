@@ -51,12 +51,28 @@ bot.command('start', (ctx) => {
 
 
 bot.command('invite', (ctx) => {
+	if (playersDb.length > 0) {
+		playersDb.forEach((player) => {
+			ctx.telegram.sendMessage(player.player.id, 'предыдущая партия завершена', Markup.removeKeyboard())
+		})
+	}
 	playersDb = []
+	movesCount = 1
 	const otherUsers: IUserData[] = usersDb.filter((user) => user.id !== ctx.from.id);
 
 	ctx.reply('выберите кого пригласить', Markup.inlineKeyboard(
 		otherUsers.map((user) => [Markup.button.callback(user.name, `invite-${user.id}`)])
 	))
+})
+
+bot.command('end', (ctx) => {
+	if (playersDb.length > 0) {
+		playersDb.forEach((player) => {
+			ctx.telegram.sendMessage(player.player.id, 'предыдущая партия завершена', Markup.removeKeyboard())
+		})
+	}
+	playersDb = []
+	movesCount = 1
 })
 
 bot.on(callbackQuery('data'), async (ctx) => {
@@ -87,7 +103,6 @@ bot.on(callbackQuery('data'), async (ctx) => {
 			return
 		}
 
-		playersDb = []
 		const users = [invitingUser, invitedUser];
 		users.forEach((user) => {
 			playersDb.push({
@@ -283,10 +298,13 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 				return
 			}
 
+			const previousPlayerMove = ctx.message.text;
+
 			ctx.telegram.sendMessage(waitingPlayer.player.id, 'ход второго игрока', Markup.removeKeyboard())
 
 			ctx.chat.id = movingPlayer.player.id
 
+			await ctx.reply(`второй игрок походил: ${previousPlayerMove}`)
 			await ctx.reply('ваше поле')
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${movingPlayer.playerField
 				.map((item) => item
@@ -297,9 +315,9 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 							case 1:
 								return '&'
 							case 2:
-								return 'o'
+								return 'O'
 							case 3:
-								return 'x'
+								return 'X'
 							default:
 								return '?'
 						}
@@ -319,9 +337,9 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 							case 1:
 								return '&'
 							case 2:
-								return 'o'
+								return 'O'
 							case 3:
-								return 'x'
+								return 'X'
 							default:
 								return '?'
 						}

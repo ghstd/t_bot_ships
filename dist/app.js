@@ -46,8 +46,19 @@ bot.command('start', (ctx) => {
     }
 });
 bot.command('invite', (ctx) => {
+    if (playersDb.length > 0) {
+        playersDb.forEach((player) => __awaiter(void 0, void 0, void 0, function* () {
+            yield ctx.telegram.sendMessage(player.player.id, 'предыдущая партия завершена');
+        }));
+    }
+    playersDb = [];
+    movesCount = 1;
     const otherUsers = usersDb.filter((user) => user.id !== ctx.from.id);
     ctx.reply('выберите кого пригласить', telegraf_1.Markup.inlineKeyboard(otherUsers.map((user) => [telegraf_1.Markup.button.callback(user.name, `invite-${user.id}`)])));
+});
+bot.command('end', (ctx) => {
+    playersDb = [];
+    movesCount = 1;
 });
 bot.on((0, filters_1.callbackQuery)('data'), (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -71,7 +82,6 @@ bot.on((0, filters_1.callbackQuery)('data'), (ctx) => __awaiter(void 0, void 0, 
             ctx.reply('пользователь отсутствует');
             return;
         }
-        playersDb = [];
         const users = [invitingUser, invitedUser];
         users.forEach((user) => {
             playersDb.push({
@@ -134,7 +144,7 @@ bot.on((0, filters_1.callbackQuery)('data'), (ctx) => __awaiter(void 0, void 0, 
             .join('\n')}</pre>`, telegraf_1.Markup.keyboard(playerField.map((item, index) => item.map((subItem, n) => `${String.fromCharCode((65 + index))}${n}`))));
     }
     if (eventType === 'playerReady') {
-        yield ctx.reply('ожидайте', telegraf_1.Markup.removeKeyboard());
+        yield ctx.editMessageText('ожидайте');
         if (playersDb.every((player) => player.ready)) {
             const playerIndex = (0, helpers_1.whoseMove)(movesCount);
             movesCount++;
@@ -195,18 +205,13 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
         }
     }
     else {
-        console.log(ctx.from.first_name);
-        console.log('from: ', ctx.from.id);
-        console.log('chat: ', ctx.chat.id);
         const playerIndex = (0, helpers_1.whoseMove)(movesCount);
-        if (!playerIndex) {
+        if (playerIndex === undefined) {
             return;
         }
         const movingPlayer = playersDb[playerIndex];
         const waitingPlayer = playersDb.find((player) => player.player.id !== playersDb[playerIndex].player.id);
-        console.log(0); //!
         if (movingPlayer && waitingPlayer) {
-            console.log(1); //!
             if (ctx.from.id === movingPlayer.player.id) {
                 ctx.reply('сейчас не ваш ход');
                 return;
@@ -219,7 +224,7 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
                     break;
                 case 1:
                     movingPlayer.playerField[coord_1][coord_2] = 3;
-                    waitingPlayer.playerField[coord_1][coord_2] = 3;
+                    waitingPlayer.targetField[coord_1][coord_2] = 3;
                     break;
                 default:
                     break;
@@ -242,10 +247,9 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
                 movesCount = 1;
                 return;
             }
-            console.log(2); //!
             ctx.telegram.sendMessage(waitingPlayer.player.id, 'ход второго игрока', telegraf_1.Markup.removeKeyboard());
             ctx.chat.id = movingPlayer.player.id;
-            console.log(ctx.chat.id);
+            yield ctx.reply('ваше поле');
             yield ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${movingPlayer.playerField
                 .map((item) => item
                 .map((i) => {
@@ -264,6 +268,7 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
             })
                 .join(' ')).map((item, index) => `${String.fromCharCode((65 + index))} ${item}`)
                 .join('\n')}</pre>`, telegraf_1.Markup.keyboard(movingPlayer.playerField.map((item, index) => item.map((subItem, n) => `${String.fromCharCode((65 + index))}${n}`))));
+            yield ctx.reply('поле второго игрока');
             yield ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${movingPlayer.targetField
                 .map((item) => item
                 .map((i) => {
