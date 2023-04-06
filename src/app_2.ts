@@ -8,37 +8,27 @@ import express from 'express';
 // const envParsed: DotenvParseOutput = config().parsed as DotenvParseOutput;
 // const token: string = envParsed.TEL_TOKEN_2;
 const bot = new Telegraf(process.env.TEL_TOKEN_2 as string);
-// const app = express();
-
-bot
-	.createWebhook({
-		domain: 'https://in-ships.onrender.com'
-	})
-	.then((result) => {
-		console.log('webhook created')
-
-		const server = http.createServer(result);
-		server.listen(8000, () => console.log('test server started'))
-
-		bot.start((ctx) => {
-			console.log('bot is working')
-		})
-	})
-	.catch((e) => console.log('error in webhook: ', e?.message))
+const app = express();
 
 
 
-// async function init() {
 
-// 	app.use(await bot.createWebhook({ domain: '127.0.0.1' }));
 
-// 	bot.on("text", ctx => ctx.reply("Hello"));
+async function init() {
 
-// 	app.listen(8000, () => console.log("Listening on port", 8000));
+	app.use(await bot.createWebhook({ domain: 'https://in-ships.onrender.com' }));
 
-// }
+	bot.on("text", ctx => ctx.reply("Hello"));
 
-// init()
+	app.listen(8000, () => console.log("Listening on port"));
+
+}
+
+try {
+	init()
+} catch (error) {
+	console.log(error)
+}
 
 
 
