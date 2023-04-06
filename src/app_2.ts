@@ -16,11 +16,15 @@ const app = express();
 
 async function init() {
 
-	app.use(await bot.createWebhook({ domain: 'https://in-ships.onrender.com' }));
+	const res = await bot.createWebhook({ domain: 'https://in-ships.onrender.com/' });
 
-	bot.on("text", ctx => ctx.reply("Hello"));
+	console.log(res)
 
-	app.listen(8000, () => console.log("Listening on port"));
+	app.use(res)
+
+	bot.on("text", ctx => ctx.reply("Hello"))
+
+	app.listen(8443, () => console.log("Listening on port"))
 
 }
 
