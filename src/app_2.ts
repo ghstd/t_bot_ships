@@ -10,12 +10,16 @@ import express from 'express';
 const bot = new Telegraf(process.env.TEL_TOKEN_2 as string);
 // const app = express();
 
-bot.createWebhook({
-	domain: 'https://in-ships.onrender.com'
-})
+bot
+	.createWebhook({
+		domain: 'https://in-ships.onrender.com'
+	})
+	.then(() => console.log('webhook created'))
+	.catch((e) => console.log('error in webhook: ', e?.message))
 
 const server = http.createServer((request, response) => {
-	console.log(request)
+	console.log(request.url)
+	response.end()
 });
 
 
