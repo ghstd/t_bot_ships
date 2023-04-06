@@ -14,17 +14,19 @@ bot
 	.createWebhook({
 		domain: 'https://in-ships.onrender.com'
 	})
-	.then(() => console.log('webhook created'))
+	.then((result) => {
+		console.log('webhook created')
+
+		const server = http.createServer(result);
+		server.listen(8000, () => console.log('test server started'))
+
+		bot.start((ctx) => {
+			console.log('bot is working')
+		})
+	})
 	.catch((e) => console.log('error in webhook: ', e?.message))
 
-const server = http.createServer((request, response) => {
-	console.log(request.url)
-	response.end()
-});
 
-
-
-server.listen(8000, () => console.log('test server started'))
 
 // async function init() {
 
