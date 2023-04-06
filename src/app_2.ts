@@ -16,7 +16,7 @@ const app = express();
 
 async function init() {
 
-	const res = await bot.createWebhook({ domain: 'https://in-ships.onrender.com/' });
+	const res = await bot.createWebhook({ domain: 'https://in-ships.onrender.com/dist/app_2.js' });
 
 	console.log(res)
 
