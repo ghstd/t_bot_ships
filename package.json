@@ -18,6 +18,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^18.15.10",
+		"ngrok": "^4.3.3",
 		"nodemon": "^2.0.22",
 		"ts-node": "^10.9.1"
 	}

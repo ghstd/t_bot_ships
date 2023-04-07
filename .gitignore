@@ -2,5 +2,5 @@
 .env
 /dist
 /temp
-/api
 .vercel
+/src
