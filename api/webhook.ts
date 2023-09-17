@@ -48,8 +48,8 @@ async function init() {
 						id: user.telegramID
 					},
 					ready: player.ready,
-					playerField: JSON.parse(player.playerField),
-					targetField: JSON.parse(player.targetField)
+					playerField: JSON.parse(player.playerField) as number[][],
+					targetField: JSON.parse(player.targetField) as number[][]
 				}
 			}
 		})
@@ -184,8 +184,8 @@ bot.on(callbackQuery('data'), async (ctx) => {
 							id: user.telegramID
 						},
 						ready: player.ready,
-						playerField: JSON.parse(player.playerField),
-						targetField: JSON.parse(player.targetField)
+						playerField: JSON.parse(player.playerField) as number[][],
+						targetField: JSON.parse(player.targetField) as number[][]
 					}
 				}
 			})
