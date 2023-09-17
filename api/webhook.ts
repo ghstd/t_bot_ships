@@ -39,12 +39,18 @@ async function init() {
 	const session = await dbGetSession(SESSION_ID) // dbGetSession
 	if (session) {
 		movesCount = session.movesCount
-		playersDb = session.players.map((player) => ({
-			player: player.user,
-			ready: player.ready,
-			playerField: JSON.parse(player.playerField),
-			targetField: JSON.parse(player.targetField)
-		}))
+		playersDb = session.players.map(async (player) => {
+			const user = await dbGetUser(player.userId)
+			return {
+				player: {
+					name: user?.name,
+					id: user?.id
+				},
+				ready: player.ready,
+				playerField: JSON.parse(player.playerField),
+				targetField: JSON.parse(player.targetField)
+			}
+		})
 	}
 }
 
@@ -166,7 +172,18 @@ bot.on(callbackQuery('data'), async (ctx) => {
 		const session = await dbGetSession(SESSION_ID) // dbGetSession
 		if (session) {
 			movesCount = session.movesCount
-			playersDb = session.players
+			playersDb = session.players.map(async (player) => {
+				const user = await dbGetUser(player.userId)
+				return {
+					player: {
+						name: user?.name,
+						id: user?.id
+					},
+					ready: player.ready,
+					playerField: JSON.parse(player.playerField),
+					targetField: JSON.parse(player.targetField)
+				}
+			})
 		}
 
 		ctx.editMessageText(`вы приняли приглашение от ${invitingUser.name}`, Markup.inlineKeyboard([
