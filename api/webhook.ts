@@ -4,19 +4,10 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { callbackQuery } from 'telegraf/filters';
 import { checkField, whoseMove } from '../helpers/helpers';
 
+import { IUserData, IPlayerData } from '../prisma/types'
+import { dbGetUsers, dbGetSession, dbAddUser, dbDeleteSession, dbDeletePlayer, dbAddSession, dbAddPlayer, dbUpdateSession, dbGetUser, dbUpdatePlayer } from '../prisma/queries'
+
 const bot = new Telegraf(process.env.TEL_TOKEN as string);
-interface IUserData {
-	name: string;
-	id: number;
-};
-interface IPlayerData {
-	player: IUserData;
-	ready: boolean;
-	playerField: number[][];
-	targetField: number[][];
-};
-const usersDb: IUserData[] = [];
-let playersDb: IPlayerData[] = [];
 
 const fieldTemplate = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -31,9 +22,32 @@ const fieldTemplate = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
-let movesCount = 1;
+const SESSION_ID = 1
+let usersDb: IUserData[] = [];
+let playersDb: IPlayerData[] = [];
+let movesCount: number;
 
-bot.command('start', (ctx) => {
+async function init() {
+	const users = await dbGetUsers() // dbGetUsers
+	if (users) {
+		usersDb = users.map((user) => ({
+			name: user.name,
+			id: user.telegramID
+		}))
+	}
+
+	const session = await dbGetSession(SESSION_ID) // dbGetSession
+	if (session) {
+		movesCount = session.movesCount
+		playersDb = session.players
+	}
+}
+
+init()
+
+
+
+bot.command('start', async (ctx) => {
 	const newUser: IUserData = {
 		name: ctx.from.first_name,
 		id: ctx.from.id
@@ -42,16 +56,17 @@ bot.command('start', (ctx) => {
 	if (usersDb.find((user) => user.id === newUser.id)) {
 		ctx.reply('вы уже есть в списке бота', Markup.removeKeyboard())
 	} else {
+		await dbAddUser(newUser) // dbAddUser
 		usersDb.push(newUser)
 		ctx.reply('вы добавлены в список бота', Markup.removeKeyboard())
 	}
 })
 
-
-
-bot.command('invite', (ctx) => {
+bot.command('invite', async (ctx) => {
 	if (playersDb.length > 0) {
-		playersDb.forEach((player) => {
+		await dbDeleteSession(SESSION_ID) // dbDeleteSession
+		playersDb.forEach(async (player, index) => {
+			await dbDeletePlayer(index + 1) // dbDeletePlayer
 			ctx.telegram.sendMessage(player.player.id, 'предыдущая партия завершена', Markup.removeKeyboard())
 		})
 	}
@@ -64,9 +79,11 @@ bot.command('invite', (ctx) => {
 	))
 })
 
-bot.command('end', (ctx) => {
+bot.command('end', async (ctx) => {
 	if (playersDb.length > 0) {
-		playersDb.forEach((player) => {
+		await dbDeleteSession(SESSION_ID) // dbDeleteSession
+		playersDb.forEach(async (player, index) => {
+			await dbDeletePlayer(index + 1) // dbDeletePlayer
 			ctx.telegram.sendMessage(player.player.id, 'предыдущая партия завершена', Markup.removeKeyboard())
 		})
 	}
@@ -102,9 +119,14 @@ bot.on(callbackQuery('data'), async (ctx) => {
 			return
 		}
 
-		const users = [invitingUser, invitedUser];
-		users.forEach((user) => {
-			playersDb.push({
+		await dbAddSession(SESSION_ID) // dbAddSession
+		const usersInDB = await dbGetUsers()
+		const users = [invitingUser, invitedUser]
+
+		users.forEach(async (user, index) => {
+			const userId = usersInDB.find((userInDb) => userInDb.telegramID === user.id)?.id
+
+			const playerData: IPlayerData = {
 				player: user,
 				ready: false,
 				playerField: [
@@ -131,8 +153,16 @@ bot.on(callbackQuery('data'), async (ctx) => {
 					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 				]
-			})
+			}
+
+			await dbAddPlayer(playerData, userId || index, SESSION_ID) // dbAddPlayer
 		})
+
+		const session = await dbGetSession(SESSION_ID) // dbGetSession
+		if (session) {
+			movesCount = session.movesCount
+			playersDb = session.players
+		}
 
 		ctx.editMessageText(`вы приняли приглашение от ${invitingUser.name}`, Markup.inlineKeyboard([
 			[Markup.button.callback('начать', 'startGame')]
@@ -175,8 +205,16 @@ bot.on(callbackQuery('data'), async (ctx) => {
 	if (eventType === 'playerReady') {
 		await ctx.editMessageText('ожидайте')
 		if (playersDb.every((player) => player.ready)) {
+			playersDb.forEach(async (player) => {
+				const userDB = await dbGetUser(player.player.id) // dbGetUser
+				if (userDB) {
+					await dbUpdatePlayer(userDB.id, { playerField: JSON.stringify(player.playerField) }) // dbUpdatePlayer
+				}
+			})
+
 			const playerIndex = whoseMove(movesCount);
 			movesCount++
+			await dbUpdateSession(SESSION_ID, movesCount) // dbUpdateSession
 			if (!playerIndex) {
 				return
 			}
@@ -232,7 +270,11 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 					playerField.map((item, index) => item.map((subItem, n) => `${String.fromCharCode((65 + index))}${n}`))
 				))
 		} else {
+			const userDB = await dbGetUser(player.player.id) // dbGetUser
 			player.ready = true
+			if (userDB) {
+				await dbUpdatePlayer(userDB.id, { ready: player.ready }) // dbUpdatePlayer
+			}
 
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${playerField
 				.map((item) => item
@@ -261,15 +303,35 @@ bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.
 			}
 
 			movesCount++
+			await dbUpdateSession(SESSION_ID, movesCount) // dbUpdateSession
+			const movingPlayerDB = await dbGetUser(movingPlayer.player.id) // dbGetUser
+			const waitingPlayerDB = await dbGetUser(waitingPlayer.player.id) // dbGetUser
 
 			switch (movingPlayer.playerField[coord_1][coord_2]) {
 				case 0:
+
 					movingPlayer.playerField[coord_1][coord_2] = 2
+					if (movingPlayerDB) {
+						await dbUpdatePlayer(movingPlayerDB.id, { playerField: JSON.stringify(movingPlayer.playerField) }) // dbUpdatePlayer
+					}
+
 					waitingPlayer.targetField[coord_1][coord_2] = 2
+					if (waitingPlayerDB) {
+						await dbUpdatePlayer(waitingPlayerDB.id, { targetField: JSON.stringify(waitingPlayer.targetField) }) // dbUpdatePlayer
+					}
+
 					break;
 				case 1:
 					movingPlayer.playerField[coord_1][coord_2] = 3
+					if (movingPlayerDB) {
+						await dbUpdatePlayer(movingPlayerDB.id, { playerField: JSON.stringify(movingPlayer.playerField) }) // dbUpdatePlayer
+					}
+
 					waitingPlayer.targetField[coord_1][coord_2] = 3
+					if (waitingPlayerDB) {
+						await dbUpdatePlayer(waitingPlayerDB.id, { targetField: JSON.stringify(waitingPlayer.targetField) }) // dbUpdatePlayer
+					}
+
 					break;
 				default:
 					break;
@@ -373,7 +435,7 @@ export default async (
 }
 
 
-// curl -X POST https://api.telegram.org/bot5993619286:AAFFffIULroz5RdV27rNFucmTBmNsTo8VDY/setWebhook -H "Content-type: application/json" -d '{"url": "https://7fa8-188-163-110-12.ngrok.io/api/webhook"}'
+// curl -X POST https://api.telegram.org/bot5993619286:AAFFffIULroz5RdV27rNFucmTBmNsTo8VDY/setWebhook -H "Content-type: application/json" -d '{"url": "tbwhook-ghstd.vercel.app/api/webhook"}'
 
 
 
