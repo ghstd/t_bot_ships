@@ -28,9 +28,9 @@ let playersDb: IPlayerData[] = [];
 let movesCount: number;
 
 async function init() {
-	const users = await dbGetUsers() // dbGetUsers
-	if (users) {
-		usersDb = users.map((user) => ({
+	const allUsers = await dbGetUsers() // dbGetUsers
+	if (allUsers) {
+		usersDb = allUsers.map((user) => ({
 			name: user.name,
 			id: user.telegramID
 		}))
@@ -39,12 +39,12 @@ async function init() {
 	const session = await dbGetSession(SESSION_ID) // dbGetSession
 	if (session) {
 		movesCount = session.movesCount
-		playersDb = session.players.map(async (player) => {
-			const user = await dbGetUser(player.userId)
+		playersDb = session.players.map((player) => {
+			const user = allUsers.find((user) => user.id === player.userId)
 			return {
 				player: {
 					name: user?.name,
-					id: user?.id
+					id: user?.telegramID
 				},
 				ready: player.ready,
 				playerField: JSON.parse(player.playerField),
@@ -169,15 +169,16 @@ bot.on(callbackQuery('data'), async (ctx) => {
 			await dbAddPlayer(playerData, userId || index, SESSION_ID) // dbAddPlayer
 		})
 
+		const allUsers = await dbGetUsers() // dbGetUsers
 		const session = await dbGetSession(SESSION_ID) // dbGetSession
 		if (session) {
 			movesCount = session.movesCount
-			playersDb = session.players.map(async (player) => {
-				const user = await dbGetUser(player.userId)
+			playersDb = session.players.map((player) => {
+				const user = allUsers.find((user) => user.id === player.userId)
 				return {
 					player: {
 						name: user?.name,
-						id: user?.id
+						id: user?.telegramID
 					},
 					ready: player.ready,
 					playerField: JSON.parse(player.playerField),
