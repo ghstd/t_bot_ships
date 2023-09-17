@@ -41,14 +41,16 @@ async function init() {
 		movesCount = session.movesCount
 		playersDb = session.players.map((player) => {
 			const user = allUsers.find((user) => user.id === player.userId)
-			return {
-				player: {
-					name: user?.name,
-					id: user?.telegramID
-				},
-				ready: player.ready,
-				playerField: JSON.parse(player.playerField),
-				targetField: JSON.parse(player.targetField)
+			if (user) {
+				return {
+					player: {
+						name: user.name,
+						id: user.telegramID
+					},
+					ready: player.ready,
+					playerField: JSON.parse(player.playerField),
+					targetField: JSON.parse(player.targetField)
+				}
 			}
 		})
 	}
@@ -175,14 +177,16 @@ bot.on(callbackQuery('data'), async (ctx) => {
 			movesCount = session.movesCount
 			playersDb = session.players.map((player) => {
 				const user = allUsers.find((user) => user.id === player.userId)
-				return {
-					player: {
-						name: user?.name,
-						id: user?.telegramID
-					},
-					ready: player.ready,
-					playerField: JSON.parse(player.playerField),
-					targetField: JSON.parse(player.targetField)
+				if (user) {
+					return {
+						player: {
+							name: user.name,
+							id: user.telegramID
+						},
+						ready: player.ready,
+						playerField: JSON.parse(player.playerField),
+						targetField: JSON.parse(player.targetField)
+					}
 				}
 			})
 		}
