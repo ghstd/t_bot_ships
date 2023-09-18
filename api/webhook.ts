@@ -56,13 +56,12 @@ async function init() {
 		})
 	}
 }
-console.log('usersDb: ', usersDb)
-console.log('usersDb[0]: ', usersDb[0])
-init()
+
 
 
 
 bot.command('start', async (ctx) => {
+	await init()
 	const newUser: IUserData = {
 		name: ctx.from.first_name,
 		id: ctx.from.id
