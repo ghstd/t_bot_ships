@@ -29,7 +29,6 @@ let movesCount: number;
 
 async function init() {
 	const allUsers = await dbGetUsers() // dbGetUsers
-	console.log('allUsers: ', allUsers)
 	if (allUsers) {
 		usersDb = allUsers.map((user) => ({
 			name: user.name,
@@ -66,7 +65,7 @@ bot.command('start', async (ctx) => {
 		name: ctx.from.first_name,
 		id: ctx.from.id
 	};
-	console.log('finding in usersDb: ', usersDb.find((user) => user.id === newUser.id))
+
 	if (usersDb.find((user) => user.id === newUser.id)) {
 		ctx.reply('вы уже есть в списке бота', Markup.removeKeyboard())
 	} else {
@@ -77,6 +76,7 @@ bot.command('start', async (ctx) => {
 })
 
 bot.command('invite', async (ctx) => {
+	await init()
 	if (playersDb.length > 0) {
 		await dbDeleteSession(SESSION_ID) // dbDeleteSession
 		playersDb.forEach(async (player, index) => {
@@ -94,6 +94,7 @@ bot.command('invite', async (ctx) => {
 })
 
 bot.command('end', async (ctx) => {
+	await init()
 	if (playersDb.length > 0) {
 		await dbDeleteSession(SESSION_ID) // dbDeleteSession
 		playersDb.forEach(async (player, index) => {
@@ -106,6 +107,7 @@ bot.command('end', async (ctx) => {
 })
 
 bot.on(callbackQuery('data'), async (ctx) => {
+	await init()
 	const [eventType, eventId] = ctx.callbackQuery.data.split('-');
 
 	if (eventType === 'invite') {
@@ -261,6 +263,7 @@ bot.on(callbackQuery('data'), async (ctx) => {
 })
 
 bot.hears(fieldTemplate.map((item, index) => item.map((subItem, n) => `${String.fromCharCode((65 + index))}${n}`)).flat(), async (ctx) => {
+	await init()
 	const coords = ctx.message.text.split('');
 	const coord_1 = coords[0].charCodeAt(0) - 65;
 	const coord_2 = parseInt(coords[1]);
