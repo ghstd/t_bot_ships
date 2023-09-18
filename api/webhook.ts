@@ -65,7 +65,7 @@ bot.command('start', async (ctx) => {
 		name: ctx.from.first_name,
 		id: ctx.from.id
 	};
-
+	console.log('finding in usersDb: ', usersDb.find((user) => user.id === newUser.id))
 	if (usersDb.find((user) => user.id === newUser.id)) {
 		ctx.reply('вы уже есть в списке бота', Markup.removeKeyboard())
 	} else {
