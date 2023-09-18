@@ -29,6 +29,7 @@ let movesCount: number;
 
 async function init() {
 	const allUsers = await dbGetUsers() // dbGetUsers
+	console.log('allUsers: ', allUsers)
 	if (allUsers) {
 		usersDb = allUsers.map((user) => ({
 			name: user.name,
@@ -56,6 +57,7 @@ async function init() {
 	}
 }
 console.log('usersDb: ', usersDb)
+console.log('usersDb[0]: ', usersDb[0])
 init()
 
 
