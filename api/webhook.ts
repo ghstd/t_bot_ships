@@ -55,7 +55,7 @@ async function init() {
 		})
 	}
 }
-
+console.log('usersDb: ', usersDb)
 init()
 
 
