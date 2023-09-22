@@ -2,7 +2,7 @@
 	"name": "tel",
 	"version": "1.0.0",
 	"scripts": {
-		"build": "",
+		"build": "npx prisma generate",
 		"start": "node ./build/bot.js"
 	},
 	"keywords": [],
