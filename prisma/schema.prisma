@@ -1,0 +1,35 @@
+generator client {
+   provider = "prisma-client-js"
+   output   = "/prisma"
+}
+
+datasource db {
+   provider  = "postgresql"
+   url       = env("POSTGRES_PRISMA_URL")
+   directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+//=========================
+
+model User {
+   id            Int    @id @unique
+   name          String
+   sessions      Int[]
+   activeSession Int?
+}
+
+model Session {
+   id         Int      @id @default(autoincrement())
+   movesCount Int      @default(1)
+   players    Player[]
+}
+
+model Player {
+   id          Int     @id @default(autoincrement())
+   userId      Int
+   userName    String
+   ready       Boolean
+   playerField Json
+   targetField Json
+   session     Session @relation(fields: [id], references: [id])
+}

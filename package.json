@@ -2,7 +2,7 @@
 	"name": "tel",
 	"version": "1.0.0",
 	"scripts": {
-		"build": "npx prisma generate --schema=./api/schema.prisma",
+		"build": "",
 		"start": "node ./api/webhook.js"
 	},
 	"keywords": [],
