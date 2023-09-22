@@ -9,7 +9,7 @@ export default () => {
 		mode: 'production',
 		entry: path.join(__dirname, 'dist', 'api', 'bot.js'),
 		output: {
-			path: path.join(__dirname, 'public'),
+			path: path.join(__dirname, 'build'),
 			filename: 'bot.js',
 			clean: true
 		},

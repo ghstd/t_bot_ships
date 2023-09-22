@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "tsc && webpack",
-		"start": "node ./public/bot.js",
+		"start": "node ./build/bot.js",
 		"dev": "nodemon"
 	},
 	"type": "module",
