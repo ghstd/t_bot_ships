@@ -2,8 +2,9 @@
 	"name": "tel",
 	"version": "1.0.0",
 	"scripts": {
-		"build": "",
-		"start": "node ./api/webhook.js"
+		"build": "npx prisma generate",
+		"start": "node ./api/webhook.js",
+		"postinstall": "npx prisma generate"
 	},
 	"keywords": [],
 	"license": "ISC",
