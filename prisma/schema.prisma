@@ -11,25 +11,24 @@ datasource db {
 //=========================
 
 model User {
-   id         Int     @id @default(autoincrement())
-   telegramID Int     @unique
-   name       String
-   player     Player?
-}
-
-model Player {
-   id          Int     @id @default(autoincrement())
-   ready       Boolean
-   playerField String
-   targetField String
-   user        User    @relation(fields: [userId], references: [id])
-   userId      Int     @unique
-   sessions    Session @relation(fields: [sessionId], references: [id])
-   sessionId   Int
+   id            Int    @id @unique
+   name          String
+   sessions      Int[]
+   activeSession Int?
 }
 
 model Session {
    id         Int      @id @default(autoincrement())
    movesCount Int      @default(1)
    players    Player[]
+}
+
+model Player {
+   id          Int     @id @default(autoincrement())
+   userId      Int
+   userName    String
+   ready       Boolean
+   playerField Json
+   targetField Json
+   session     Session @relation(fields: [id], references: [id])
 }

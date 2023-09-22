@@ -108,25 +108,19 @@ export function checkField(inputData: number[][]) {
 
 	if (result === 20) {
 		return {
-			status: true,
+			correct: true,
 			message: 'DONE! - успешная расстановка',
 			quantity: quantityOfItems
 		}
 	} else {
 		return {
-			status: false,
+			correct: false,
 			message: '... продолжайте расстановку',
 			quantity: quantityOfItems
 		}
 	}
 }
 
-export function whoseMove(counter: number) {
-	if (counter % 2 < 2) {
-		return counter % 2
-	} else {
-		whoseMove(counter % 2)
-	}
-}
+
 
 

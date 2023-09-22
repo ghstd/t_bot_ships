@@ -1,10 +1,8 @@
 {
 	"watch": [
-		"src"
+		"api"
 	],
-	"ext": "ts,json",
-	"ignore": [
-		"src/**/*.spec.ts"
-	],
-	"exec": "ts-node ./src/webhook.ts"
+	"ext": "js,ts,json",
+	"ignore": [],
+	"exec": "ts-node ./api/bot.ts"
 }
