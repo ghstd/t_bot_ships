@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"scripts": {
 		"build": "npx prisma generate",
-		"start": "node ./build/bot.js"
+		"start": "node ./api/webhook.js"
 	},
 	"keywords": [],
 	"license": "ISC",
