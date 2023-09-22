@@ -1,8 +1,0 @@
-{
-	"watch": [
-		"api"
-	],
-	"ext": "js,ts,json",
-	"ignore": [],
-	"exec": "ts-node ./api/bot.ts"
-}
