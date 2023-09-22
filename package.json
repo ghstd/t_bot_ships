@@ -4,10 +4,11 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build": "tsc",
-		"start": "node ./api/bot.js",
+		"build": "tsc && webpack",
+		"start": "node ./public/bot.js",
 		"dev": "nodemon"
 	},
+	"type": "module",
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
@@ -22,6 +23,7 @@
 		"ngrok": "^4.3.3",
 		"nodemon": "^2.0.22",
 		"prisma": "^5.3.1",
-		"ts-node": "^10.9.1"
+		"webpack": "^5.88.2",
+		"webpack-cli": "^5.1.4"
 	}
 }

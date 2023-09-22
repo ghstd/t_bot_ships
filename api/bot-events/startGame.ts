@@ -1,4 +1,4 @@
-import { dbGetPlayer } from '../db-queries/queries'
+import { dbGetPlayer } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
 import { eventCTX } from '../types'
 

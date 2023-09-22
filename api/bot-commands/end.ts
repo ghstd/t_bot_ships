@@ -1,5 +1,5 @@
 import { Markup } from 'telegraf'
-import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetSession, dbGetUser } from '../db-queries/queries'
+import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetSession, dbGetUser } from '../db-queries/queries.js'
 import { CTX } from '../types'
 
 export async function end(ctx: CTX) {

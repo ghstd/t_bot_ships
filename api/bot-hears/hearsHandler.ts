@@ -1,8 +1,8 @@
-import { Markup } from 'telegraf';
-import { checkField } from '../../helpers/checkField';
-import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetPlayer, dbGetPlayerByUserId, dbGetSession, dbUpdatePlayerField, dbUpdatePlayerReady, dbUpdatePlayerTargetField, dbUpdateSessionMovesCount } from '../db-queries/queries';
-import { hearsCTX } from '../types';
-import { whoseMove } from '../../helpers/whoseMove';
+import { Markup } from 'telegraf'
+import { checkField } from '../../helpers/checkField.js'
+import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetPlayer, dbGetPlayerByUserId, dbGetSession, dbUpdatePlayerField, dbUpdatePlayerReady, dbUpdatePlayerTargetField, dbUpdateSessionMovesCount } from '../db-queries/queries.js'
+import { hearsCTX } from '../types'
+import { whoseMove } from '../../helpers/whoseMove.js'
 
 export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: number) {
 	const player = await dbGetPlayerByUserId(ctx.from.id)

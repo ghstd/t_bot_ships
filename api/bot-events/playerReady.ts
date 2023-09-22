@@ -1,7 +1,7 @@
-import { dbGetSession, dbGetUser, dbUpdateSessionMovesCount } from '../db-queries/queries'
+import { dbGetSession, dbGetUser, dbUpdateSessionMovesCount } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
 import { eventCTX } from '../types'
-import { whoseMove } from '../../helpers/whoseMove'
+import { whoseMove } from '../../helpers/whoseMove.js'
 
 export async function playerReady(ctx: eventCTX) {
 	if (ctx.from) {

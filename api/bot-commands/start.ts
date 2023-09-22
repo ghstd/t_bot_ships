@@ -1,6 +1,6 @@
 import { Markup } from 'telegraf'
 import { CTX, User } from '../types'
-import { dbAddUser, dbGetUser } from '../db-queries/queries'
+import { dbAddUser, dbGetUser } from '../db-queries/queries.js'
 
 export async function start(ctx: CTX) {
 	const user = await dbGetUser(ctx.from.id)

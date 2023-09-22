@@ -1,7 +1,7 @@
-import { dbAddSession, dbGetUser, dbUpdateUser } from '../db-queries/queries'
+import { dbAddSession, dbGetUser, dbUpdateUser } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
 import { Bot, Player, eventCTX } from '../types'
-import { fieldTemplate } from '../constants'
+import { fieldTemplate } from '../constants.js'
 
 export async function inviteResolve(bot: Bot, ctx: eventCTX, eventId: number) {
 	if (ctx.from) {

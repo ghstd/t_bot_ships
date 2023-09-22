@@ -1,4 +1,4 @@
-import { dbGetUser } from '../db-queries/queries'
+import { dbGetUser } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
 import { Bot, eventCTX } from '../types'
 

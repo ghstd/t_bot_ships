@@ -1,6 +1,6 @@
 import { Markup } from 'telegraf'
 import { CTX, User } from '../types'
-import { dbGetAllUsers } from '../db-queries/queries'
+import { dbGetAllUsers } from '../db-queries/queries.js'
 
 export async function invite(ctx: CTX) {
 	const users = await dbGetAllUsers()

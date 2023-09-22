@@ -1,4 +1,4 @@
-import { dbGetUser } from '../db-queries/queries'
+import { dbGetUser } from '../db-queries/queries.js'
 import { Bot, eventCTX } from '../types'
 
 export async function inviteReject(bot: Bot, ctx: eventCTX, eventId: number) {
