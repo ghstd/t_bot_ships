@@ -1,16 +1,28 @@
 {
 	"name": "tel",
 	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
 	"scripts": {
-		"build": "npx prisma generate",
-		"start": "node ./api/webhook.js",
-		"postinstall": "npx prisma generate"
+		"build": "",
+		"start": "node ./api/webhook.js"
 	},
+	"type": "module",
 	"keywords": [],
+	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@prisma/client": "^5.3.1",
+		"firebase": "^10.4.0",
 		"telegraf": "^4.14.0",
+		"typescript": "^5.0.3",
+		"uuid": "^9.0.1",
 		"vercel": "^28.18.3"
+	},
+	"devDependencies": {
+		"@types/node": "^18.15.10",
+		"@types/uuid": "^9.0.4",
+		"nodemon": "^2.0.22",
+		"webpack": "^5.88.2",
+		"webpack-cli": "^5.1.4"
 	}
 }
