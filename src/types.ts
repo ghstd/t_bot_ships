@@ -1,5 +1,5 @@
-import Context, { NarrowedContext } from 'telegraf/typings/context'
-import { CallbackQuery, Message, Update } from 'telegraf/typings/core/types/typegram'
+import Context, { type NarrowedContext } from 'telegraf/typings/context'
+import type { CallbackQuery, Message, Update } from 'telegraf/typings/core/types/typegram'
 import { Telegraf } from 'telegraf/typings/telegraf'
 
 export interface User {
