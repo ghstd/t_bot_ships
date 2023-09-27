@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"rootDir": "./",
+		"outDir": "./dist",
+		"noImplicitAny": true,
+		"module": "ESNext",
+		"target": "ES5",
+		"allowJs": true,
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": "."
+	},
+	"include": [
+		"helpers",
+		"src",
+		"netlify/functions/bot.ts"
+	]
+}

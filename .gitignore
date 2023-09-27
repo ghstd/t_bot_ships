@@ -1,0 +1,4 @@
+node_modules
+.env
+sethook.js
+test.js
