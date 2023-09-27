@@ -1,13 +1,13 @@
 {
 	"compilerOptions": {
 		"rootDir": "./",
-		"outDir": "./dist",
 		"noImplicitAny": true,
 		"module": "ESNext",
 		"target": "ES5",
 		"allowJs": true,
 		"moduleResolution": "node",
 		"esModuleInterop": true,
+		"verbatimModuleSyntax": true,
 		"allowSyntheticDefaultImports": true,
 		"baseUrl": "."
 	},

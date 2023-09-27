@@ -15,7 +15,7 @@ import { hearsHandler } from '../../src/bot-hears/hearsHandler.js'
 import { sessionHandler } from '../../src/bot-events/sessionHandler.js'
 import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions"
 
-const bot = new Telegraf('5993619286:AAFFffIULroz5RdV27rNFucmTBmNsTo8VDY')
+const bot = new Telegraf(process.env.TEL_TOKEN as string)
 
 bot.catch((err: Error, ctx) => {
 	console.log(err.message)
