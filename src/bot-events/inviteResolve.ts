@@ -37,12 +37,8 @@ export async function inviteResolve(bot: Bot, ctx: eventCTX, eventId: number) {
 		}
 
 		const session = await dbAddSession([inviterPlayer, guestPlayer])
-		console.log('inviteResolve - session', session)
-		const updetedInviter = await dbUpdateUser(inviter.id, session.id)
-		console.log('inviteResolve - updetedInviter', updetedInviter)
-		const updetedGuelt = await dbUpdateUser(guest.id, session.id)
-		console.log('inviteResolve - updetedGuelt', updetedGuelt)
-		console.log('inviteResolve')
+		await dbUpdateUser(inviter.id, session.id)
+		await dbUpdateUser(guest.id, session.id)
 		await ctx.editMessageText(`вы приняли приглашение от ${inviter.name}`, Markup.inlineKeyboard([
 			[Markup.button.callback('начать', 'startGame')]
 		]))
