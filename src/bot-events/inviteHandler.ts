@@ -1,6 +1,6 @@
 import { dbGetUser } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
-import { Bot, eventCTX } from '../types'
+import type { Bot, eventCTX } from '../types'
 
 export async function inviteHandler(bot: Bot, ctx: eventCTX, eventId: number) {
 	if (ctx.from) {

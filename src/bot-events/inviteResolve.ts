@@ -1,6 +1,6 @@
 import { dbAddSession, dbGetUser, dbUpdateUser } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
-import { Bot, Player, eventCTX } from '../types'
+import type { Bot, eventCTX } from '../types'
 import { fieldTemplate } from '../constants.js'
 
 export async function inviteResolve(bot: Bot, ctx: eventCTX, eventId: number) {
@@ -34,7 +34,7 @@ export async function inviteResolve(bot: Bot, ctx: eventCTX, eventId: number) {
 		const session = await dbAddSession([inviterPlayer, guestPlayer])
 		await dbUpdateUser(inviter.id, session.id)
 		await dbUpdateUser(guest.id, session.id)
-
+		console.log('here')
 		await ctx.editMessageText(`вы приняли приглашение от ${inviter.name}`, Markup.inlineKeyboard([
 			[Markup.button.callback('начать', 'startGame')]
 		]))
