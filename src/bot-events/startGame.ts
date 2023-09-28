@@ -1,10 +1,10 @@
-import { dbGetPlayer } from '../db-queries/queries.js'
+import { dbGetPlayerByUserId } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
 import type { eventCTX } from '../types'
 
 export async function startGame(ctx: eventCTX) {
 	if (ctx.from) {
-		const player = await dbGetPlayer(`${ctx.from.id}`)
+		const player = await dbGetPlayerByUserId(ctx.from.id)
 
 		if (typeof player.playerField === 'string') {
 			const playerField = JSON.parse(player.playerField) as number[][]
