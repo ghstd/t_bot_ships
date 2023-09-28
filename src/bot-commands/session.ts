@@ -1,9 +1,14 @@
 import { Markup } from 'telegraf'
-import { CTX } from '../types'
+import type { CTX } from '../types'
 import { dbGetSession, dbGetUser } from '../db-queries/queries.js'
 
 export async function session(ctx: CTX) {
 	const user = await dbGetUser(ctx.from.id)
+
+	if (!('id' in user)) {
+		console.log('session', user)
+		return
+	}
 
 	if (user.sessions.length > 1) {
 		const sessions = await Promise.all(user.sessions.map(async (session) => {

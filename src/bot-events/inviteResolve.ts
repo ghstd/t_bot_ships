@@ -8,8 +8,13 @@ export async function inviteResolve(bot: Bot, ctx: eventCTX, eventId: number) {
 		const inviter = await dbGetUser(eventId)
 		const guest = await dbGetUser(ctx.from.id)
 
-		if (!inviter || !guest) {
-			await ctx.reply('пользователь отсутствует')
+		if (!('id' in inviter)) {
+			console.log('inviteResolve', inviter)
+			return
+		}
+
+		if (!('id' in guest)) {
+			console.log('inviteResolve', guest)
 			return
 		}
 
@@ -34,7 +39,7 @@ export async function inviteResolve(bot: Bot, ctx: eventCTX, eventId: number) {
 		const session = await dbAddSession([inviterPlayer, guestPlayer])
 		await dbUpdateUser(inviter.id, session.id)
 		await dbUpdateUser(guest.id, session.id)
-		console.log('here')
+		console.log('inviteResolve')
 		await ctx.editMessageText(`вы приняли приглашение от ${inviter.name}`, Markup.inlineKeyboard([
 			[Markup.button.callback('начать', 'startGame')]
 		]))

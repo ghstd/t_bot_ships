@@ -1,11 +1,16 @@
 import { dbGetSession, dbGetUser, dbUpdateSessionMovesCount } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
-import { eventCTX } from '../types'
+import type { eventCTX } from '../types'
 import { whoseMove } from '../../helpers/whoseMove.js'
 
 export async function playerReady(ctx: eventCTX) {
 	if (ctx.from) {
 		const user = await dbGetUser(ctx.from.id)
+
+		if (!('id' in user)) {
+			console.log('playerReady', user)
+			return
+		}
 
 		if (user.activeSession) {
 			const session = await dbGetSession(user.activeSession)

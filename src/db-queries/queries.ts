@@ -34,9 +34,9 @@ async function requestToServer(point: string, payload?: any) {
 			body: JSON.stringify(payload)
 		})
 		console.log('point: ', point)
-		console.log('status: ', response.status)
-
 		const result = await response.json()
+		console.log('result: ', result)
+
 		return result
 
 	} catch (error) {
@@ -77,7 +77,7 @@ export async function dbGetAllUsers(): Promise<User[]> {
 	return await requestToServer('dbGetAllUsers')
 }
 
-export async function dbGetUser(id: number): Promise<User> {
+export async function dbGetUser(id: number): Promise<User | { data: null }> {
 	return await requestToServer('dbGetUser', { id })
 }
 

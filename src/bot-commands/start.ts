@@ -1,11 +1,10 @@
 import { Markup } from 'telegraf'
-import { CTX, User } from '../types'
+import type { CTX, User } from '../types'
 import { dbAddUser, dbGetUser } from '../db-queries/queries.js'
 
 export async function start(ctx: CTX) {
 	const user = await dbGetUser(ctx.from.id)
-	console.log(user)
-	if (user) {
+	if ('id' in user) {
 		await ctx.reply('нифига, вы уже есть в списке бота', Markup.removeKeyboard())
 	} else {
 		const newUser: User = {

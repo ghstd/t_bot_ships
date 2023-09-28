@@ -1,9 +1,14 @@
 import { Markup } from 'telegraf'
 import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetSession, dbGetUser } from '../db-queries/queries.js'
-import { CTX } from '../types'
+import type { CTX } from '../types'
 
 export async function end(ctx: CTX) {
 	const user = await dbGetUser(ctx.from.id)
+
+	if (!('id' in user)) {
+		console.log('end', user)
+		return
+	}
 
 	if (user.activeSession) {
 		const session = await dbGetSession(user.activeSession)

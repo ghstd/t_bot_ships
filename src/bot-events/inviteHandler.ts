@@ -7,8 +7,13 @@ export async function inviteHandler(bot: Bot, ctx: eventCTX, eventId: number) {
 		const inviter = await dbGetUser(ctx.from.id)
 		const guest = await dbGetUser(eventId)
 
-		if (!inviter || !guest) {
-			await ctx.reply('пользователь отсутствует')
+		if (!('id' in inviter)) {
+			console.log('inviteHandler', inviter)
+			return
+		}
+
+		if (!('id' in guest)) {
+			console.log('inviteHandler', guest)
 			return
 		}
 

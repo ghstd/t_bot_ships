@@ -1,6 +1,6 @@
 import { dbGetPlayer } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
-import { eventCTX } from '../types'
+import type { eventCTX } from '../types'
 
 export async function startGame(ctx: eventCTX) {
 	if (ctx.from) {
