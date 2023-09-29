@@ -4,5 +4,5 @@
 	],
 	"ext": "ts,json",
 	"ignore": [],
-	"exec": "ts-node-esm ./src/bot.ts"
+	"exec": "ts-node-esm ./netlify/functions/bot.ts"
 }

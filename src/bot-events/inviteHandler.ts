@@ -3,6 +3,7 @@ import { Markup } from 'telegraf'
 import type { Bot, eventCTX } from '../types'
 
 export async function inviteHandler(bot: Bot, ctx: eventCTX, eventId: number) {
+	console.log('source: ', 'inviteHandler')
 	if (ctx.from) {
 		const inviter = await dbGetUser(ctx.from.id)
 		const guest = await dbGetUser(eventId)

@@ -60,6 +60,7 @@ bot.hears(fieldTemplate.map((item, index) => item.map((itm, n) => `${String.from
 })
 
 // =========================
+// bot.launch()
 
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
 	try {

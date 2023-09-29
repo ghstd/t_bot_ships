@@ -33,10 +33,8 @@ async function requestToServer(point: string, payload?: any) {
 			},
 			body: JSON.stringify(payload)
 		})
-		console.log('point: ', point)
+		console.log('<//point//>: ', point)
 		const result = await response.json()
-		console.log('result: ', result)
-
 		return result
 
 	} catch (error) {

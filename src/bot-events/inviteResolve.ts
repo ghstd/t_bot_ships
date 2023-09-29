@@ -4,6 +4,7 @@ import type { Bot, eventCTX } from '../types'
 import { fieldTemplate } from '../constants.js'
 
 export async function inviteResolve(bot: Bot, ctx: eventCTX, eventId: number) {
+	console.log('source: ', 'inviteResolve')
 	if (ctx.from) {
 		const inviter = await dbGetUser(eventId)
 		const guest = await dbGetUser(ctx.from.id)

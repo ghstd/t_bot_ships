@@ -1,6 +1,6 @@
 import { Markup } from 'telegraf'
 import { checkField } from '../../helpers/checkField.js'
-import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetPlayer, dbGetPlayerByUserId, dbGetSession, dbUpdatePlayerField, dbUpdatePlayerReady, dbUpdatePlayerTargetField, dbUpdateSessionMovesCount } from '../db-queries/queries.js'
+import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetPlayer, dbGetPlayerByUserId, dbGetSession, dbUpdatePlayerField, dbUpdatePlayerTargetField, dbUpdateSessionMovesCount } from '../db-queries/queries.js'
 import type { hearsCTX } from '../types'
 import { whoseMove } from '../../helpers/whoseMove.js'
 
@@ -10,6 +10,7 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 	const movesCount = session.movesCount
 
 	if (movesCount === 1) {
+		console.log('source: ', 'hearsHandler: movesCount === 1')
 
 		if (player.ready) {
 			await ctx.reply('вы уже выполнили расстановку')
@@ -29,7 +30,7 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 		const playerFieldStatus = checkField(playerFieldCurrent)
 
 		if (!playerFieldStatus.correct) {
-			await ctx.reply(playerFieldStatus.message)
+			await ctx.editMessageText(playerFieldStatus.message)
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${playerFieldCurrent
 				.map((item) => item
 					.map((i) => i === 1 ? '&' : '-')
@@ -39,7 +40,6 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 				))
 
 		} else {
-			await dbUpdatePlayerReady(player.id, true)
 
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${playerFieldCurrent
 				.map((item) => item
@@ -52,10 +52,12 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 			]))
 		}
 	} else {
+		console.log('source: ', 'hearsHandler: movesCount > 1')
+
 		const i = whoseMove(movesCount)
 
 		const movingPlayerId = session.players[i].id
-		const waitingPlayerId = session.players.find((player) => player.id !== movingPlayer.id)!.id
+		const waitingPlayerId = session.players.find((player) => player.id !== movingPlayerId).id
 
 		const movingPlayer = await dbGetPlayer(movingPlayerId)
 		const waitingPlayer = await dbGetPlayer(waitingPlayerId)

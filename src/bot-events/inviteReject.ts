@@ -2,6 +2,7 @@ import { dbGetUser } from '../db-queries/queries.js'
 import type { Bot, eventCTX } from '../types'
 
 export async function inviteReject(bot: Bot, ctx: eventCTX, eventId: number) {
+	console.log('source: ', 'inviteReject')
 	if (ctx.from) {
 		const inviter = await dbGetUser(eventId)
 		const guest = await dbGetUser(ctx.from.id)

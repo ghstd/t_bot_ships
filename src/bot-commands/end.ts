@@ -3,6 +3,7 @@ import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetSession,
 import type { CTX } from '../types'
 
 export async function end(ctx: CTX) {
+	console.log('source: ', 'end')
 	const user = await dbGetUser(ctx.from.id)
 
 	if (!('id' in user)) {

@@ -3,6 +3,7 @@ import type { CTX, User } from '../types'
 import { dbAddUser, dbGetUser } from '../db-queries/queries.js'
 
 export async function start(ctx: CTX) {
+	console.log('source: ', 'start')
 	const user = await dbGetUser(ctx.from.id)
 	if ('id' in user) {
 		await ctx.reply('нифига, вы уже есть в списке бота', Markup.removeKeyboard())

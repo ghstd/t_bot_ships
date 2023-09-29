@@ -2,6 +2,7 @@ import { dbGetSession, dbUpdateUserActiveSession } from '../db-queries/queries.j
 import type { eventCTX } from '../types'
 
 export async function sessionHandler(ctx: eventCTX, eventId: string) {
+	console.log('source: ', 'sessionHandler')
 	if (ctx.from) {
 		const user = await dbUpdateUserActiveSession(ctx.from.id, eventId)
 		const activeSession = await dbGetSession(user.activeSession)

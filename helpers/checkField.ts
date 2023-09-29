@@ -109,7 +109,7 @@ export function checkField(inputData: number[][]) {
 	if (result === 20) {
 		return {
 			correct: true,
-			message: 'DONE! - успешная расстановка',
+			message: 'успешная расстановка!',
 			quantity: quantityOfItems
 		}
 	} else {

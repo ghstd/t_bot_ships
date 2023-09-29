@@ -1,10 +1,15 @@
-import { dbGetSession, dbGetUser, dbUpdateSessionMovesCount } from '../db-queries/queries.js'
+import { dbGetPlayerByUserId, dbGetSession, dbGetUser, dbUpdatePlayerReady, dbUpdateSessionMovesCount } from '../db-queries/queries.js'
 import { Markup } from 'telegraf'
 import type { eventCTX } from '../types'
 import { whoseMove } from '../../helpers/whoseMove.js'
 
 export async function playerReady(ctx: eventCTX) {
+	console.log('source: ', 'playerReady')
 	if (ctx.from) {
+		const player = await dbGetPlayerByUserId(ctx.from.id)
+		await dbUpdatePlayerReady(player.id, true)
+		ctx.editMessageText('сохранено')
+
 		const user = await dbGetUser(ctx.from.id)
 
 		if (!('id' in user)) {
@@ -23,17 +28,15 @@ export async function playerReady(ctx: eventCTX) {
 				const movingPlayer = session.players[i];
 				const waitingPlayer = session.players.find((player) => player.userId !== movingPlayer.userId)!
 
-				if (typeof movingPlayer.playerField === 'string') {
-					const playerField = JSON.parse(movingPlayer.playerField) as number[][]
+				const playerField = movingPlayer.playerField
 
-					await ctx.telegram.sendMessage(waitingPlayer.userId, 'ход второго игрока')
-					await ctx.telegram.sendMessage(movingPlayer.userId, 'ваш ход', Markup.keyboard(
-						playerField.map((item, index) => item.map((subItem, n) => `${String.fromCharCode((65 + index))}${n}`))
-					))
-				}
+				await ctx.telegram.sendMessage(waitingPlayer.userId, 'ход второго игрока')
+				await ctx.telegram.sendMessage(movingPlayer.userId, 'ваш ход', Markup.keyboard(
+					playerField.map((item, index) => item.map((subItem, n) => `${String.fromCharCode((65 + index))}${n}`))
+				))
+			} else {
+				await ctx.editMessageText('ожидайте')
 			}
-		} else {
-			await ctx.editMessageText('ожидайте')
 		}
 	}
 }

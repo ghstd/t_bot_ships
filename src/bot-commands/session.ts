@@ -3,6 +3,7 @@ import type { CTX } from '../types'
 import { dbGetSession, dbGetUser } from '../db-queries/queries.js'
 
 export async function session(ctx: CTX) {
+	console.log('source: ', 'session')
 	const user = await dbGetUser(ctx.from.id)
 
 	if (!('id' in user)) {
