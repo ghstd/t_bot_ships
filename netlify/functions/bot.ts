@@ -90,7 +90,9 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 				type: 'article',
 				id,
 				title: 'webapp response',
-				input_message_content: result
+				input_message_content: {
+					message_text: result
+				}
 			})
 			return {
 				statusCode: 200,
