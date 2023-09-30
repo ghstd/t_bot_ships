@@ -5,6 +5,7 @@ import { start } from '../../src/bot-commands/start.js'
 import { invite } from '../../src/bot-commands/invite.js'
 import { session } from '../../src/bot-commands/session.js'
 import { end } from '../../src/bot-commands/end.js'
+import { webapp } from '../../src/bot-commands/webapp.js'
 import { fieldTemplate } from '../../src/constants.js'
 import { inviteHandler } from '../../src/bot-events/inviteHandler.js'
 import { inviteResolve } from '../../src/bot-events/inviteResolve.js'
@@ -16,6 +17,7 @@ import { sessionHandler } from '../../src/bot-events/sessionHandler.js'
 import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions"
 
 const bot = new Telegraf(process.env.TEL_TOKEN as string)
+// const bot = new Telegraf('5993619286:AAFFffIULroz5RdV27rNFucmTBmNsTo8VDY')
 
 bot.catch((err: Error, ctx) => {
 	console.log(err.message)
@@ -25,6 +27,7 @@ bot.command('start', start)
 bot.command('invite', invite)
 bot.command('session', session)
 bot.command('end', end)
+bot.command('webapp', webapp)
 bot.on(callbackQuery('data'), async (ctx) => {
 	const [eventType, eventId] = ctx.callbackQuery.data.split('-')
 
@@ -62,8 +65,11 @@ bot.hears(fieldTemplate.map((item, index) => item.map((itm, n) => `${String.from
 // =========================
 // bot.launch()
 
+
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
 	try {
+		console.log('event: ', event)
+		console.log('event.body: ', JSON.parse(event.body))
 		await bot.handleUpdate(JSON.parse(event.body))
 		return { statusCode: 200, body: '' }
 	} catch (error) {
