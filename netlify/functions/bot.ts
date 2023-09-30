@@ -18,6 +18,7 @@ import { sessionHandler } from '../../src/bot-events/sessionHandler.js'
 import type { Handler, HandlerEvent, HandlerContext } from "@netlify/functions"
 
 const bot = new Telegraf(process.env.TEL_TOKEN as string)
+// const bot = new Telegraf('5993619286:AAFFffIULroz5RdV27rNFucmTBmNsTo8VDY')
 
 bot.catch((err: Error, ctx) => {
 	console.log(err.message)
@@ -67,6 +68,18 @@ bot.hears(fieldTemplate.map((item, index) => item.map((itm, n) => `${String.from
 // bot.launch()
 
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
+	if (event.httpMethod == 'OPTIONS') {
+		console.log('OPTIONS request')
+		return {
+			statusCode: 200,
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Headers": "Content-Type",
+				"Access-Control-Allow-Methods": "GET, POST, OPTION",
+			}
+		}
+	}
+
 	try {
 		const body = JSON.parse(event.body)
 		console.log('body: ', body)
