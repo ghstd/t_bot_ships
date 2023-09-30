@@ -30,7 +30,7 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 		const playerFieldStatus = checkField(playerFieldCurrent)
 
 		if (!playerFieldStatus.correct) {
-			await ctx.editMessageText(playerFieldStatus.message)
+			await ctx.reply(playerFieldStatus.message)
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${playerFieldCurrent
 				.map((item) => item
 					.map((i) => i === 1 ? '&' : '-')
