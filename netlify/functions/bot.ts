@@ -83,7 +83,7 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 	try {
 
 		const body = JSON.parse(event.body)
-		console.log('body: ', body)
+
 		if (body.myMark === 'webapp') {
 			const { id, result } = body
 			await bot.telegram.answerWebAppQuery(id, {
