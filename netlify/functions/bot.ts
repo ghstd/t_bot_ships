@@ -81,9 +81,9 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 	}
 
 	try {
+
 		const body = JSON.parse(event.body)
 		console.log('body: ', body)
-
 		if (body.myMark === 'webapp') {
 			const { id, result } = body
 			await bot.telegram.answerWebAppQuery(id, {
@@ -92,11 +92,27 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
 				title: 'webapp response',
 				input_message_content: result
 			})
-			return { statusCode: 200, body: '' }
+			return {
+				statusCode: 200,
+				body: '',
+				headers: {
+					"Access-Control-Allow-Origin": "*",
+					"Access-Control-Allow-Headers": "Content-Type",
+					"Access-Control-Allow-Methods": "GET, POST, OPTION",
+				}
+			}
 		}
 
 		await bot.handleUpdate(body)
-		return { statusCode: 200, body: '' }
+		return {
+			statusCode: 200,
+			body: '',
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Headers": "Content-Type",
+				"Access-Control-Allow-Methods": "GET, POST, OPTION",
+			}
+		}
 	} catch (error) {
 		console.error('error handler: ', error)
 		return { statusCode: 400, body: 'Error was here' }
