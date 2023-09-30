@@ -6,10 +6,16 @@ import { whoseMove } from '../../helpers/whoseMove.js'
 
 export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: number) {
 	const player = await dbGetPlayerByUserId(ctx.from.id)
+	//@ts-ignore
+	if (!player.data) {
+		console.log('hearsHandler: player is null')
+		return
+	}
 	const session = await dbGetSession(player.session.id)
 	//@ts-ignore
 	if (!session.data) {
 		console.log('hearsHandler: session is null')
+		return
 	}
 	const movesCount = session.movesCount
 
