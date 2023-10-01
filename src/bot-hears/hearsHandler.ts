@@ -8,13 +8,15 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 	const player = await dbGetPlayerByUserId(ctx.from.id)
 	//@ts-ignore
 	if (!player.data) {
-		console.log('hearsHandler: player is null')
+		//@ts-ignore
+		console.log('hearsHandler: player is null, target: ', player.target)
 		return
 	}
 	const session = await dbGetSession(player.session.id)
 	//@ts-ignore
 	if (!session.data) {
-		console.log('hearsHandler: session is null')
+		//@ts-ignore
+		console.log('hearsHandler: session is null, target: ', session.target)
 		return
 	}
 	const movesCount = session.movesCount
