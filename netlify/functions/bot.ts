@@ -27,9 +27,9 @@ bot.command('start', start)
 bot.command('invite', invite)
 bot.command('session', session)
 bot.command('end', end)
-bot.command('webappButton', webappButton)
-bot.command('keyboardOn', standartButtons)
-bot.command('keyboardOff', keyboardOff)
+bot.command('webapp', webappButton)
+bot.command('btns_on', standartButtons)
+bot.command('btns_off', keyboardOff)
 bot.on(callbackQuery('data'), async (ctx) => {
 	const [eventType, eventId] = ctx.callbackQuery.data.split('-')
 
