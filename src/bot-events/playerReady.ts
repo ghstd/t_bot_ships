@@ -7,6 +7,12 @@ export async function playerReady(ctx: eventCTX) {
 	console.log('source: ', 'playerReady')
 	if (ctx.from) {
 		const player = await dbGetPlayerByUserId(ctx.from.id)
+		//@ts-ignore
+		if (player.noData) {
+			//@ts-ignore
+			console.log('playerReady - player.noData: ', player.noData)
+			return
+		}
 		await dbUpdatePlayerReady(player.id, true)
 		ctx.editMessageText('сохранено')
 

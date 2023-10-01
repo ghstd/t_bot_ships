@@ -6,6 +6,7 @@ import { session } from '../../src/bot-commands/session.js'
 import { end } from '../../src/bot-commands/end.js'
 import { webappButton } from '../../src/bot-commands/webappButton.js'
 import { standartButtons } from '../../src/bot-commands/standartButtons.js'
+import { keyboardOff } from '../../src/bot-commands/keyboardOff.js'
 import { fieldTemplate } from '../../src/constants.js'
 import { inviteHandler } from '../../src/bot-events/inviteHandler.js'
 import { inviteResolve } from '../../src/bot-events/inviteResolve.js'
@@ -27,7 +28,8 @@ bot.command('invite', invite)
 bot.command('session', session)
 bot.command('end', end)
 bot.command('webappButton', webappButton)
-bot.command('standartButtons', standartButtons)
+bot.command('keyboardOn', standartButtons)
+bot.command('keyboardOff', keyboardOff)
 bot.on(callbackQuery('data'), async (ctx) => {
 	const [eventType, eventId] = ctx.callbackQuery.data.split('-')
 
@@ -53,6 +55,9 @@ bot.on(callbackQuery('data'), async (ctx) => {
 		default:
 			break;
 	}
+})
+bot.hears('**', async (ctx) => {
+	await hearsHandler(ctx, -1, -1)
 })
 bot.hears(fieldTemplate.map((item, index) => item.map((itm, n) => `${String.fromCharCode((65 + index))}${n}`)).flat(), async (ctx) => {
 	const coords = ctx.message.text.split('')
