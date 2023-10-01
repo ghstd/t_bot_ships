@@ -37,7 +37,7 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 					.join(' ')).map((item, index) => `${String.fromCharCode((65 + index))} ${item}`)
 				.join('\n')}</pre>`, Markup.removeKeyboard())
 
-			await ctx.reply('...', Markup.inlineKeyboard([
+			await ctx.reply('продолжить', Markup.inlineKeyboard([
 				[Markup.button.callback('продолжить', 'playerReady')]
 			]))
 
