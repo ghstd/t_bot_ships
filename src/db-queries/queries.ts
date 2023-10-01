@@ -75,7 +75,7 @@ export async function dbGetAllUsers(): Promise<User[]> {
 	return await requestToServer('dbGetAllUsers')
 }
 
-export async function dbGetUser(id: number): Promise<User | { data: null }> {
+export async function dbGetUser(id: number): Promise<User> {
 	return await requestToServer('dbGetUser', { id })
 }
 

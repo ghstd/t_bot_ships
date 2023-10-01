@@ -6,13 +6,22 @@ export async function end(ctx: CTX) {
 	console.log('source: ', 'end')
 	const user = await dbGetUser(ctx.from.id)
 
-	if (!('id' in user)) {
-		console.log('end', user)
+	//@ts-ignore
+	if (user.noData) {
+		//@ts-ignore
+		console.log('end - user.noData: ', user.noData)
 		return
 	}
 
 	if (user.activeSession) {
 		const session = await dbGetSession(user.activeSession)
+
+		//@ts-ignore
+		if (session.noData) {
+			//@ts-ignore
+			console.log('end - user.noData: ', session.noData)
+			return
+		}
 
 		session.players.forEach(async (player) => {
 			await dbDeleteSessionFromUser(player.userId, session.id)

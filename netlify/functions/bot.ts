@@ -1,6 +1,5 @@
 import { Telegraf } from 'telegraf'
 import { callbackQuery } from 'telegraf/filters'
-import { test } from '../../src/bot-commands/test.js'
 import { start } from '../../src/bot-commands/start.js'
 import { invite } from '../../src/bot-commands/invite.js'
 import { session } from '../../src/bot-commands/session.js'
@@ -23,7 +22,6 @@ const bot = new Telegraf(process.env.TEL_TOKEN as string)
 bot.catch((err: Error, ctx) => {
 	console.log(err.message)
 })
-bot.command('test', test)
 bot.command('start', start)
 bot.command('invite', invite)
 bot.command('session', session)
