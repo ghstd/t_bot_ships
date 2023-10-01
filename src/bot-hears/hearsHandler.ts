@@ -40,6 +40,8 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 			await ctx.reply('...', Markup.inlineKeyboard([
 				[Markup.button.callback('продолжить', 'playerReady')]
 			]))
+
+			return
 		}
 		// =======
 
