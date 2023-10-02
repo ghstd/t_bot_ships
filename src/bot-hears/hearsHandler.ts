@@ -4,6 +4,10 @@ import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetPlayer, 
 import type { hearsCTX } from '../types'
 import { whoseMove } from '../../helpers/whoseMove.js'
 
+const ship = String.fromCharCode(9973)
+const hit = String.fromCharCode(9875)
+const miss = String.fromCharCode(10042)
+
 export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: number) {
 	const player = await dbGetPlayerByUserId(ctx.from.id)
 	//@ts-ignore
@@ -33,7 +37,7 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 		if (coord_1 === -1 && coord_2 === -1) {
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${player.playerField
 				.map((item) => item
-					.map((i) => i === 1 ? '&' : '-')
+					.map((i) => i === 1 ? ship : '-')
 					.join(' ')).map((item, index) => `${String.fromCharCode((65 + index))} ${item}`)
 				.join('\n')}</pre>`, Markup.removeKeyboard())
 
@@ -61,7 +65,7 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 			await ctx.reply(playerFieldStatus.message)
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${playerFieldCurrent
 				.map((item) => item
-					.map((i) => i === 1 ? '&' : '-')
+					.map((i) => i === 1 ? ship : '-')
 					.join(' ')).map((item, index) => `${String.fromCharCode((65 + index))} ${item}`)
 				.join('\n')}</pre>`, Markup.keyboard(
 					playerFieldCurrent.map((item, index) => item.map((subItem, n) => `${String.fromCharCode((65 + index))}${n}`))
@@ -71,7 +75,7 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 
 			await ctx.replyWithHTML(`<pre>  0 1 2 3 4 5 6 7 8 9\n${playerFieldCurrent
 				.map((item) => item
-					.map((i) => i === 1 ? '&' : '-')
+					.map((i) => i === 1 ? ship : '-')
 					.join(' ')).map((item, index) => `${String.fromCharCode((65 + index))} ${item}`)
 				.join('\n')}</pre>`, Markup.removeKeyboard())
 
@@ -159,11 +163,11 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 						case 0:
 							return '-'
 						case 1:
-							return '&'
+							return ship
 						case 2:
-							return 'O'
+							return miss
 						case 3:
-							return 'X'
+							return hit
 						default:
 							return '?'
 					}
@@ -181,11 +185,11 @@ export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: numb
 						case 0:
 							return '-'
 						case 1:
-							return '&'
+							return ship
 						case 2:
-							return 'O'
+							return miss
 						case 3:
-							return 'X'
+							return hit
 						default:
 							return '?'
 					}
