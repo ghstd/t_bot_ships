@@ -4,8 +4,8 @@ import { dbDeletePlayer, dbDeleteSession, dbDeleteSessionFromUser, dbGetPlayer, 
 import type { hearsCTX } from '../types'
 import { whoseMove } from '../../helpers/whoseMove.js'
 
-const ship = String.fromCharCode(9973)
-const hit = String.fromCharCode(9875)
+const ship = String.fromCharCode(9608)
+const hit = String.fromCharCode(88)
 const miss = String.fromCharCode(10042)
 
 export async function hearsHandler(ctx: hearsCTX, coord_1: number, coord_2: number) {

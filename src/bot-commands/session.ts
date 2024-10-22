@@ -25,6 +25,6 @@ export async function session(ctx: CTX) {
 		await ctx.reply(`текущая сессия: ${activeSession.players[0].userName} vs ${activeSession.players[1].userName}`)
 		await ctx.reply('выберите другую сессию:', Markup.inlineKeyboard(keyboard))
 	} else {
-		await ctx.reply('та пока нет других сессий, пригласите ещё кого-то')
+		await ctx.reply('пока нет других сессий')
 	}
 }
